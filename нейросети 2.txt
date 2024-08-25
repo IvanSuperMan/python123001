@@ -1,0 +1,44 @@
+import pandas as pd
+import numpy as np
+import keras
+import sklearn as sk
+# plt нужна для преобразвания массива в обычное изображение
+import matplotlib.pyplot as plt 
+from keras.datasets import mnist
+from keras.utils import to_categorical
+from keras.models import Sequential
+from keras.layers import Dense, Flatten
+# mnist.load_data() возвращает две пары тренировочных и тестовых данных и меток
+(X_train, y_train), (X_test, y_test) = mnist.load_data()
+print(X_train[0])
+print(X_train.shape, y_train.shape)
+print(X_test.shape, y_test.shape)
+plt.imshow(X_train[1895])
+plt.show()
+X_train = X_train / 255.0
+X_test = X_test / 255.0
+# to_categorical перевод набора правильных ответов на язык, который принимает нейросеть
+y_train = to_categorical(y_train)
+y_test = to_categorical(y_test)
+# Sequential создает модель как последовательность нескольких слоев
+model = Sequential()
+# Flatten простой слой выполняет преобразование входных данных из многомерного формата в одномерный
+model.add(Flatten(input_shape=(28,28)))
+# Dense добавляет полносвязанные слои с фунциями активации ReLU и softmax
+model.add(Dense(128, activation='relu'))
+model.add(Dense(10, activation='softmax'))
+# adam optimizer это аллгоритм который изменяет артрибуту модели
+# categorical_crossentropy функция потерь, способ измериения того насколько далеко
+# предсказание модели находятся от истинных значений
+# metrica способ оценки на сколько хорошо модели выполняют свои задачи на основе тестовох данных
+# accuracy точность это простая метрика для классификации
+# accuracy измеряет долю правильных ответов
+model.compile(loss='categorical_crossentropy',
+                optimizer='adam',
+                          metrics=['accuracy'])
+
+
+# fit используется для обучения модели на тренировочных данных с самопроверкой на тестовых данных
+model.fit(X_train, y_train,
+        batch_size=32, epochs=5,
+              validation_data=(X_test, y_test))

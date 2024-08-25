@@ -1,0 +1,7 @@
+print("Калькулятор\n")
+first_number = int(input("Введите первое число: "))
+#print(type(first_number))
+#first_number = int(first_number)
+#print(type(first_number))
+second_number = int(input("Введите второе число: "))
+print("\nСумма чисел:", first_number + second_number)
